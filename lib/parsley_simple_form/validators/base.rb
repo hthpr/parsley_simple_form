@@ -23,5 +23,3 @@ module ParsleySimpleForm
     end
   end
 end
-
-Status API Training Shop Blog About Pricing
