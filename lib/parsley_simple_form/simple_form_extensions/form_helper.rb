@@ -4,17 +4,26 @@ module ParsleySimpleForm
       include SimpleForm::ActionViewExtensions::FormHelper
 
       # Custom helper to SimpleForm
-      def parsley_simple_for(object, *args, &block)
+      def parsley_simple_for(record, *args, &block)
         options = args.extract_options!
-        options[:builder] ||= ParsleySimpleForm::SimpleFormAdapt
-        parsley = { 'parsley-validate': true,
-                    'parsley-error-class': 'has-feedback has-error',
-                    'parsley-success-class': 'has-feedback has-success',
-                    'parsley-errors-wrapper': '<span class="help-block">',
-                    'parsley-error-template': '<div></div>',
-                    'parsley-trigger': 'focusout' }
 
-        simple_form_for(object, *(args << options.merge(html: { data: parsley })), &block)
+        case record
+        when String, Symbol
+          object = nil
+        else
+          object = record.is_a?(Array) ? record.last : record
+        end
+
+        parsley = { :'parsley-validate' => true,
+                    :'parsley-error-class' => 'has-feedback has-error',
+                    :'parsley-success-class' => 'has-feedback has-success',
+                    :'parsley-errors-wrapper' => '<span class="help-block">',
+                    :'parsley-error-template' => '<div></div>' }
+        parsley[:'parsley-trigger'] = object.respond_to?(:new_record?) && object.new_record? ? 'focusout' : 'change'
+        html_options = { builder: ParsleySimpleForm::SimpleFormAdapt,
+                         html: { data: parsley } }
+
+        simple_form_for(record, *(args << html_options.deep_merge(options)), &block)
       end
     end
   end
