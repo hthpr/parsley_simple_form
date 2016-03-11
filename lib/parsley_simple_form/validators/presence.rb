@@ -1,9 +1,20 @@
 module ParsleySimpleForm
   module Validators
-    class Presence < Base
-      def attribute_validate
-        { :"parsley-required" => true, :"parsley-required-message" => message_error }
+    module Presence
+      def attribute_validate(*args)
+        options = args.extract_options!
+        options.merge!({type: :blank})
+        args << options
+        { 'parsley-required': true, 'parsley-required-message': client_side_error_message(*args) }
       end
+    end
+  end
+end
+
+module ActiveModel
+  module Validations
+    class PresenceValidator < EachValidator
+      include ParsleySimpleForm::Validators::Presence
     end
   end
 end
