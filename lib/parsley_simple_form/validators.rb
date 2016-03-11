@@ -1,11 +1,3 @@
-module ParsleySimpleForm
-  module Validators
-    extend ActiveSupport::Autoload
-
-    autoload :Base
-    autoload :Presence
-    autoload :Length
-    autoload :Numericality
-    autoload :Inclusion
-  end
-end
+require 'parsley_simple_form/validators/base'
+require 'parsley_simple_form/validators/presence'
+require 'parsley_simple_form/validators/length'

@@ -4,18 +4,17 @@ require 'active_model'
 
 require 'parsley_simple_form/version'
 require 'parsley_simple_form/simple_form_extensions/form_helper'
+require 'parsley_simple_form/validators'
 
 module ParsleySimpleForm
   extend ActiveSupport::Autoload
 
   eager_autoload do
-    autoload :Validators
     autoload :SimpleFormAdapt
   end
 
   def self.eager_load!
     super
-    ParsleySimpleForm::Validators.eager_load!
   end
 
   # Configuration to add more boolean attributes
