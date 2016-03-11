@@ -13,12 +13,12 @@ module ParsleySimpleForm
         else
           object = record.is_a?(Array) ? record.last : record
         end
-
-        parsley = { :'parsley-validate' => true,
-                    :'parsley-error-class' => 'has-feedback has-error',
-                    :'parsley-success-class' => 'has-feedback has-success',
-                    :'parsley-errors-wrapper' => '<span class="help-block">',
-                    :'parsley-error-template' => '<div></div>' }
+        # TODO: Investigate why novalidate="" and with normal simple_form_for it is novalidate="novalidate"
+        parsley = { 'parsley-validate': true,
+                    'parsley-error-class': 'has-feedback has-error',
+                    'parsley-success-class': 'has-feedback has-success',
+                    'parsley-errors-wrapper': '<span class="help-block">',
+                    'parsley-error-template': '<div></div>' }
         parsley[:'parsley-trigger'] = object.respond_to?(:new_record?) && object.new_record? ? 'focusout' : 'change'
         html_options = { builder: ParsleySimpleForm::SimpleFormAdapt,
                          html: { data: parsley } }
