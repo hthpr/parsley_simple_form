@@ -1,46 +1,36 @@
 # Provide a custom class of SimpleForm
 module ParsleySimpleForm
   class SimpleFormAdapt < SimpleForm::FormBuilder
-    map_type :presence_validation, to: ParsleySimpleForm::Validators::Presence
-    map_type :length_validation, to: ParsleySimpleForm::Validators::Length
-    map_type :numericality_validation, to: ParsleySimpleForm::Validators::Numericality
-    map_type :inclusion_validation, to: ParsleySimpleForm::Validators::Inclusion
+    include SimpleForm::Helpers::Validators
+
+    attr_reader :attribute_name, :reflection
 
     # Add parsley attributes validation
     def input(attribute_name, options = {}, &block)
+      @attribute_name = attribute_name
+      @reflection = options[:reflection]
       options[:input_html] ||= {}
+      options[:input_html][:data] ||= {}
       parsley_validations = validations_for(attribute_name)
 
-      options[:input_html].merge!(parsley_validations)
+      options[:input_html][:data].merge!(parsley_validations)
       super
     end
 
     private
 
     def validations_for(attribute_name)
-      object_class.validators_on(attribute_name).each_with_object({}) do |validate, attributes|
-        next unless klass = validate_constantize(validate.kind)
+      (attribute_validators + reflection_validators).each_with_object({}) do |v, attributes|
+        # TODO: check if it is a valid_validator? (currently fails for if certain criterias)
+        # if valid_validator?(v)
+        #  puts "VALID: #{attribute_name}"
+        # end
 
-        attributes.merge! klass.new(object, validate, attribute_name).attribute_validate
+        if v.respond_to?(:attribute_validate)
+          pass = { object: object, validate: v, attribute_name: attribute_name, lookup_action: lookup_action }
+          attributes.merge! v.attribute_validate(pass)
+        end
       end
-    end
-
-    # This method will search get custom method, whether don't find get validation from ParsleySimpleForm
-    def validate_constantize(validate_kind)
-      get_custom_validation(validate_kind) || mappings["#{validate_kind}_validation".to_sym] || false
-    end
-
-    def get_custom_validation(klass)
-      camelized = ('validators/' + klass.to_s).camelize
-      begin
-        Object.const_get(camelized)
-      rescue
-        false
-      end
-    end
-
-    def object_class
-      object.class
     end
   end
 end
