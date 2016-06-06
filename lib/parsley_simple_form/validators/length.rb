@@ -1,17 +1,25 @@
 module ParsleySimpleForm
   module Validators
-    class Length < Base
+    module Length
       PARSLEY_VALIDATES = {
         minimum: :"parsley-minlength",
-        maximum: :"parsley-maxlength"
+        maximum: :"parsley-maxlength",
+        is: :"parsley-length"
       }.freeze
 
-      def attribute_validate
-        options.each_with_object({}) do |(option, value), h|
+      def attribute_validate(*args)
+        options = args.extract_options!
+        validate = options[:validate].options
+        validate.each_with_object({}) do |(option, value), h|
           next unless key = PARSLEY_VALIDATES[option]
-          options_message = { message: options_message_for(option), count: options[option] }
-
-          h.merge! key => value, "#{key}-message" => message_error(options_message)
+          options.merge! message: options_message_for(option), count: value
+          args << options
+          h.merge! "#{key}-message": parsley_error_message(*args)
+          if option == :is
+            h.merge! "#{key}": "[#{value}, #{value}]"
+          else
+            h.merge! "#{key}": value
+          end
         end
       end
 
@@ -23,6 +31,14 @@ module ParsleySimpleForm
 
         message
       end
+    end
+  end
+end
+
+module ActiveModel
+  module Validations
+    class LengthValidator < EachValidator
+      include ParsleySimpleForm::Validators::Length
     end
   end
 end
