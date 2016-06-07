@@ -1,39 +1,52 @@
-require 'active_support/core_ext/hash/except'
-
 module ParsleySimpleForm
   module Validators
-    class Numericality < Base
+    module Numericality
       PARSLEY_VALIDATIONS = {
+        greater_than: :"parsley-gt",
         greater_than_or_equal_to: :"parsley-min",
-        less_than_or_equal_to: :"parsley-max"
+        equal_to: :"parsley-eq",
+        other_than: :"parsley-ot",
+        less_than: :"parsley-lt",
+        less_than_or_equal_to: :"parsley-max",
+        odd: :"parsley-odd",
+        even: :"parsley-even"
       }.freeze
 
-      def attribute_validate
-        options_without_message = options.except(:message)
-        attributes = options_without_message.each_with_object({}) do |(option, value), h|
-          next unless parsley_attribute = PARSLEY_VALIDATIONS[option]
-
-          h.merge!(parsley_attribute => value, "#{parsley_attribute}-message" => error_format(option, count: value))
+      def attribute_validate(*args)
+        options = args.extract_options!
+        validate = options[:validate].options
+        attributes = validate.each_with_object({}) do |(option, value), h|
+          next unless key = PARSLEY_VALIDATIONS[option]
+          options[:message] = option
+          options[:count] = value
+          h[key.to_s] = value
+          h["#{key}-message"] = parsley_error_message(options)
         end
 
-        if options_without_message.blank? || !options[:only_integer]
-          attributes[:"parsley-type"] = 'number'
-          attributes[:"parsley-type-number-message"] = error_format(:not_a_number)
+        if allow_only_integer?(validate)
+          options[:message] = :not_an_integer
+          options[:count] = nil
+          attributes.merge! "parsley-type": 'digits', 'parsley-type-message': parsley_error_message(options)
+        else
+          options[:message] = :not_a_number
+          options[:count] = nil
+          attributes.merge! "parsley-pattern": '/^-?(\d*\.)?\d+(e[-+]?\d+)?$/i', 'parsley-pattern-message': parsley_error_message(options)
         end
-
-        if options_without_message[:only_integer]
-          attributes[:"parsley-type"] = 'digits'
-          attributes[:"parsley-type-digits-message"] = error_format(:not_a_number)
-        end
-
-        attributes
       end
 
       private
 
-      def error_format(name_validate, count_option = {})
-        options[:message] || message_error(count_option, name_validate)
+      def allow_only_integer?(options)
+        options[:only_integer]
       end
+    end
+  end
+end
+
+module ActiveModel
+  module Validations
+    class NumericalityValidator < EachValidator
+      include ParsleySimpleForm::Validators::Numericality
     end
   end
 end
