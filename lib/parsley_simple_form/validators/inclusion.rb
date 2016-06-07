@@ -1,10 +1,20 @@
 module ParsleySimpleForm
   module Validators
-    class Inclusion < Base
-      def attribute_validate
-        inlist_string = options[:in].join(', ')
-        { :"parsley-inlist" => inlist_string, :"parsley-inlist-message" => message_error }
+    module Inclusion
+      def attribute_validate(*args)
+        options = args.extract_options!
+        options[:message] = :inclusion
+        inlist_string = options[:validate].options.values.join(', ')
+        { "parsley-inlist": inlist_string, "parsley-inlist-message": parsley_error_message(options) }
       end
+    end
+  end
+end
+
+module ActiveModel
+  module Validations
+    class InclusionValidator < EachValidator
+      include ParsleySimpleForm::Validators::Inclusion
     end
   end
 end
