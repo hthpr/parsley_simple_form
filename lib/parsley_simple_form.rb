@@ -28,4 +28,7 @@ module ParsleySimpleForm
   ActionView::Helpers::TagHelper::BOOLEAN_ATTRIBUTES.flatten!
 end
 
-require 'parsley_simple_form/railtie' if defined?(Rails)
+if defined?(Rails)
+  require 'parsley_simple_form/engine'
+  require 'parsley_simple_form/railtie'
+end
