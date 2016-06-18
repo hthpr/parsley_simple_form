@@ -3,3 +3,4 @@
 //= require ./parsley_simple_form/inclusion.js
 //= require ./parsley_simple_form/exclusion.js
 //= require ./parsley_simple_form/inverse_pattern.js
+//= require ./parsley_simple_form/confirmation.js
