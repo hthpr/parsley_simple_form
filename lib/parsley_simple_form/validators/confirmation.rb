@@ -11,9 +11,9 @@ module ParsleySimpleForm
   end
 end
 
-module ActiveRecord
+module ActiveModel
   module Validations
-    class ConfirmationValidator < ActiveModel::EachValidator
+    class ConfirmationValidator < EachValidator
       include ParsleySimpleForm::Validators::Confirmation
     end
   end
