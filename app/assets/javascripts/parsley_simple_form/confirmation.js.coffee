@@ -1,13 +1,8 @@
-# Automatically add equalto validator for a confirmation field
+# Make equalto validator work correctly for a confirmation field
 window.Parsley.addValidator 'confirm',
   validateString: (value, refOrValue) ->
     $reference = $(refOrValue)
     $original = $(refOrValue.replace(/_confirmation$/, ''))
-    if $reference.length and !$reference.attr('data-parsley-equalto')
-      $reference.attr 'data-parsley-equalto', refOrValue.replace(/_confirmation$/, '')
-        .attr 'data-parsley-equalto-message', $original.attr('data-parsley-confirm-message')
-        .attr 'data-parsley-trigger', 'change focusout'
-        .parsley().validate()
 
     if $reference.val().length > 0
       $reference.parsley().validate()
@@ -20,7 +15,9 @@ window.Parsley.addValidator 'confirm',
 
       $reference.removeAttr 'data-parsley-validate-if-empty'
         .val ''
-        .parsley().reset()
-        .siblings('.glyphicon').remove()
+        .parsley()
+        .reset()
+      $reference.siblings('.glyphicon').remove()
+
     true
   priority: 200
