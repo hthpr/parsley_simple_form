@@ -4,7 +4,7 @@ module ParsleySimpleForm
       def attribute_validate(*args)
         options = args.extract_options!
         options[:message] = :inclusion
-        inlist_string = options[:validate].options.values.join(', ')
+        inlist_string = options[:validate].options.slice(:in, :within).values.join(', ')
         { "parsley-inlist": inlist_string, "parsley-inlist-message": parsley_error_message(options) }
       end
     end
