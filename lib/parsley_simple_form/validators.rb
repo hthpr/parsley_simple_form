@@ -1,10 +1,1 @@
-require 'parsley_simple_form/validators/base'
-require 'parsley_simple_form/validators/presence'
-require 'parsley_simple_form/validators/length'
-require 'parsley_simple_form/validators/numericality'
-require 'parsley_simple_form/validators/inclusion'
-require 'parsley_simple_form/validators/exclusion'
-require 'parsley_simple_form/validators/format'
-require 'parsley_simple_form/validators/uniqueness'
-require 'parsley_simple_form/validators/confirmation'
-require 'parsley_simple_form/validators/parsley_equalto'
+Dir[File.dirname(__FILE__) + '/validators/*.rb'].each { |file| require file }

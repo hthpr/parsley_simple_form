@@ -19,14 +19,31 @@ module ParsleySimpleForm
 
     private
 
+    def valid_validator?(validator)
+      case parsley_validator?(validator)
+      when true, :on, :action_only
+        action_validator_match?(validator)
+      when false, :off
+        false
+      when :always
+        true
+      when :if_only
+        conditional_validators?(validator)
+      when :no_if
+        !conditional_validators?(validator)
+      else
+        !conditional_validators?(validator) && action_validator_match?(validator)
+      end
+    end
+
+    def parsley_validator?(validator)
+      return true unless validator.options.include?(:parsley)
+      validator.options[:parsley]
+    end
+
     def validations_for(attribute_name)
       (attribute_validators + reflection_validators).each_with_object({}) do |v, attributes|
-        # TODO: check if it is a valid_validator? (currently fails for if certain criterias)
-        # if valid_validator?(v)
-        #  puts "VALID: #{attribute_name}"
-        # end
-
-        if v.respond_to?(:attribute_validate)
+        if v.respond_to?(:attribute_validate) && valid_validator?(v)
           pass = { object: object, validate: v, attribute_name: attribute_name, lookup_action: lookup_action }
           attributes.merge! v.attribute_validate(pass)
         end
