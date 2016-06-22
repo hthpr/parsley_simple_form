@@ -1,6 +1,6 @@
-//= require ./parsley_simple_form/compare.js
-//= require ./parsley_simple_form/compare_extra.js
-//= require ./parsley_simple_form/inclusion.js
-//= require ./parsley_simple_form/exclusion.js
-//= require ./parsley_simple_form/inverse_pattern.js
-//= require ./parsley_simple_form/confirmation.js
+//= require ./parsley_simple_form/validators/compare.js
+//= require ./parsley_simple_form/validators/compare_extra.js
+//= require ./parsley_simple_form/validators/inclusion.js
+//= require ./parsley_simple_form/validators/exclusion.js
+//= require ./parsley_simple_form/validators/inverse_pattern.js
+//= require ./parsley_simple_form/validators/confirmation.js
