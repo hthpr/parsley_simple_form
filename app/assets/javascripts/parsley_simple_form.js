@@ -1,3 +1,5 @@
+//= require ./parsley_simple_form/config.js
+//= require parsleyjs
 //= require ./parsley_simple_form/validators/compare.js
 //= require ./parsley_simple_form/validators/compare_extra.js
 //= require ./parsley_simple_form/validators/inclusion.js
