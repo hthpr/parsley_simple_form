@@ -16,7 +16,7 @@ module ParsleySimpleForm
         options = args.extract_options!
         validate = options[:validate].options
         attributes = validate.each_with_object({}) do |(option, value), h|
-          next unless key = PARSLEY_VALIDATIONS[option]
+          next unless (key = PARSLEY_VALIDATIONS[option])
           options[:message] = option
           options[:count] = value
           h[key.to_s] = value

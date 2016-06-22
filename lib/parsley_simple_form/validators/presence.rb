@@ -3,9 +3,8 @@ module ParsleySimpleForm
     module Presence
       def attribute_validate(*args)
         options = args.extract_options!
-        options.merge!({message: :blank})
-        args << options
-        { 'parsley-required': true, 'parsley-required-message': parsley_error_message(*args) }
+        options[:message] = :blank
+        { 'parsley-required': true, 'parsley-required-message': parsley_error_message(options) }
       end
     end
   end

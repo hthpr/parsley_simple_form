@@ -11,15 +11,15 @@ module ParsleySimpleForm
         options = args.extract_options!
         validate = options[:validate].options
         validate.each_with_object({}) do |(option, value), h|
-          next unless key = PARSLEY_VALIDATES[option]
-          options.merge! message: options_message_for(option), count: value
-          args << options
-          h.merge! "#{key}-message": parsley_error_message(*args)
-          if option == :is
-            h.merge! "#{key}": "[#{value}, #{value}]"
-          else
-            h.merge! "#{key}": value
-          end
+          next unless (key = PARSLEY_VALIDATES[option])
+          options[:message] = options_message_for(option)
+          options[:count] = value
+          h[key] = if option == :is
+                     "[#{value}, #{value}]"
+                   else
+                     value
+                   end
+          h["#{key}-message"] = parsley_error_message(options)
         end
       end
 
