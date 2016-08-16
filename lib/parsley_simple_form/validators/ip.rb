@@ -17,7 +17,7 @@ end
 module ActiveRecord
   module Validations
     class IPv4Validator < ActiveModel::EachValidator
-      include ParsleySimpleForm::Validators::IPv4
+      include ParsleySimpleForm::Validators::Ipv4
     end
   end
 end
