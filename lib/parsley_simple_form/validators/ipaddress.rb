@@ -1,6 +1,6 @@
 module ParsleySimpleForm
   module Validators
-    module Ipv4
+    module IPAddress
       def validate_each(record, attribute, value)
         record.errors[attribute] << (options[:message] || 'is not a valid IP address') unless value =~ Resolv::IPv4::Regex
       end
@@ -17,8 +17,8 @@ end
 
 module ActiveRecord
   module Validations
-    class IPv4Validator < ActiveModel::EachValidator
-      include ParsleySimpleForm::Validators::Ipv4
+    class IPAddressValidator < ActiveModel::EachValidator
+      include ParsleySimpleForm::Validators::IPAddress
     end
   end
 end
