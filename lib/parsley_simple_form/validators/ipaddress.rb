@@ -8,7 +8,7 @@ module ParsleySimpleForm
       def attribute_validate(*args)
         options = args.extract_options!
         options[:message] = :invalid
-        type = options[:validate].options.type
+        type = options[:validate].options[:type]
         { 'parsley-ipaddress': type, 'parsley-ipaddress-message': parsley_error_message(options) }
       end
     end
@@ -17,7 +17,7 @@ end
 
 module ActiveRecord
   module Validations
-    class IPAddressValidator < ActiveModel::EachValidator
+    class IpaddressValidator < ActiveModel::EachValidator
       include ParsleySimpleForm::Validators::IPAddress
     end
   end
