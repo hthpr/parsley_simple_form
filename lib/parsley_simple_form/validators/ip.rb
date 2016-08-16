@@ -8,7 +8,8 @@ module ParsleySimpleForm
       def attribute_validate(*args)
         options = args.extract_options!
         options[:message] = :invalid
-        { 'parsley-ipv4': true, 'parsley-ipv4-message': parsley_error_message(options) }
+        type = options[:validate].options.type
+        { 'parsley-ipaddress': type, 'parsley-ipaddress-message': parsley_error_message(options) }
       end
     end
   end
