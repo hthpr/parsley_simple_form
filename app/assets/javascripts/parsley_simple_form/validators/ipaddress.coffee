@@ -1,4 +1,4 @@
-# IPv4 validator
+# IPv4+IPv6 validator
 window.Parsley.addValidator 'ipaddress',
   validateString: (value, type) ->
     ip =
