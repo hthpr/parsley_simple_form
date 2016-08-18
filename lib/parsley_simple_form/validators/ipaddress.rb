@@ -7,10 +7,10 @@ module ParsleySimpleForm
 
       def retrieve_me(*args)
         name = 'ipaddress'
+        options = args.extract_options
         parsley = attribute_validate(args)
         setting = parsley[("parsley-" + name).to_sym]
         message = parsley[("parsley-" + name + "-message").to_sym]
-        options = args.extract_options!
         selectkey = options[:validate].options[:selectkey]
         {selectkey => { validator: :ipaddress, setting: setting, message: message } }
       end
