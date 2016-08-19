@@ -1,6 +1,11 @@
 module ParsleySimpleForm
   module Validators
     module Uniqueness
+      def initialize(options)
+        @parsley_name = 'remote'
+        super
+      end
+
       def attribute_validate(*args)
         options = args.extract_options!
         options[:message] = :taken
@@ -8,7 +13,7 @@ module ParsleySimpleForm
         validate_path = Rails.application.routes.url_helpers.methods.grep regexp
         if validate_path.length == 1
           primary_key = options[:object].class.primary_key
-          path = Rails.application.routes.url_helpers.send validate_path.first, "#{primary_key}": options[:object].send(primary_key)
+          path = Rails.application.routes.url_helpers.send validate_path.first, :"#{primary_key}" => options[:object].send(primary_key)
           { 'parsley-remote': path, 'parsley-remote-message': parsley_error_message(options) }
         else
           {}

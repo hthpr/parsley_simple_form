@@ -4,6 +4,7 @@ module ParsleySimpleForm
       def initialize(options)
         super
         setup_equalto(options[:class])
+        @parsley_name = 'confirm'
       end
 
       def attribute_validate(*args)

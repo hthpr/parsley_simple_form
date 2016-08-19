@@ -1,19 +1,13 @@
 module ParsleySimpleForm
   module Validators
     module IPAddress
-      def validate_each(record, attribute, value)
-        record.errors[attribute] << (options[:message] || 'is not a valid IP address') unless value =~ Resolv::IPv4::Regex
+      def initialize(options)
+        @parsley_name = 'ipaddress'
+        super
       end
 
-      def retrieve_me(*args)
-        byebug
-        name = 'ipaddress'
-        #options = args.extract_options
-        parsley = attribute_validate(args)
-        setting = parsley[("parsley-" + name).to_sym]
-        message = parsley[("parsley-" + name + "-message").to_sym]
-        #selectkey = options[:validate].options[:selectkey]
-        {A: { validator: :ipaddress, setting: setting, message: message } }
+      def validate_each(record, attribute, value)
+        record.errors[attribute] << (options[:message] || 'is not a valid IP address') unless value =~ Resolv::IPv4::Regex
       end
 
       def attribute_validate(*args)

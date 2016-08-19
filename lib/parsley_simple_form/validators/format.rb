@@ -7,8 +7,10 @@ module ParsleySimpleForm
         validate = options[:validate].options
         regexp = validate.slice(:with, :without).values.first.to_javascript
         if validate[:with]
+          @parsley_name = 'pattern'
           { "parsley-pattern": regexp, "parsley-pattern-message": parsley_error_message(options) }
         elsif validate[:without]
+          @parsley_name = 'inversepattern'
           { "parsley-inversepattern": regexp, "parsley-inversepattern-message": parsley_error_message(options) }
         end
       end

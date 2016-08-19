@@ -1,6 +1,11 @@
 module ParsleySimpleForm
   module Validators
     module Presence
+      def initialize(options)
+        @parsley_name = 'required'
+        super
+      end
+
       def attribute_validate(*args)
         options = args.extract_options!
         options[:message] = :blank

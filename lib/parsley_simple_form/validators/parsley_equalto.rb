@@ -4,6 +4,11 @@ require 'active_model/validator'
 
 module ParsleyEqualto
   class Validator < ActiveModel::EachValidator
+    def initialize(options)
+      @parsley_name = 'equalto'
+      super
+    end
+
     def validate_each(record, attribute, value)
     end
 

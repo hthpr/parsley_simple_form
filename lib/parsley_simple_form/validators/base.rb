@@ -1,6 +1,21 @@
 module ParsleySimpleForm
   module Validators
     module Base
+      attr_reader :parsley_name
+
+      def psm_setting
+        ('parsley-' + parsley_name).to_sym
+      end
+
+      def psm_message
+        ('parsley-' + parsley_name + '-message').to_sym
+      end
+
+      def select_validator(*args)
+        parsley = attribute_validate(*args)
+        { options[:selectkey] => { validator: parsley_name, setting: parsley[psm_setting], message: parsley[psm_message] } }
+      end
+
       def parsley_error_message(*args)
         options = args.extract_options!
         object = options[:object]

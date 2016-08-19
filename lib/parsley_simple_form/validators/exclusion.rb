@@ -1,6 +1,11 @@
 module ParsleySimpleForm
   module Validators
     module Exclusion
+      def initialize(options)
+        @parsley_name = 'exlist'
+        super
+      end
+
       def attribute_validate(*args)
         options = args.extract_options!
         options[:message] = :exclusion

@@ -1,6 +1,11 @@
 module ParsleySimpleForm
   module Validators
     module Inclusion
+      def initialize(options)
+        @parsley_name = 'inlist'
+        super
+      end
+
       def attribute_validate(*args)
         options = args.extract_options!
         options[:message] = :inclusion
