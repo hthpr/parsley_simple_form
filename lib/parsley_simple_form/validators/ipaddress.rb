@@ -20,11 +20,10 @@ module ParsleySimpleForm
       private
 
       def valid_ip?(type, value)
+        resolv = { ipv4: 'Resolv::IPv4::Regex', ipv6: 'Resolv::IPv6::Regex' }
         case type
-        when 'ipv4'
-          return true if value =~ Resolv::IPv4::Regex
-        when 'ipv6'
-          return true if value =~ Resolv::IPv6::Regex
+        when 'ipv4', 'ipv6'
+          return true if value =~ resolv[:type]
         when 'ipv4+v6', 'both', 'ipv4v6', 'all'
           return true if value =~ Resolv::IPv4::Regex || value =~ Resolv::IPv6::Regex
         end
