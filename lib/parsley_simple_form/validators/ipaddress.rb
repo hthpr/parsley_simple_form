@@ -27,8 +27,8 @@ module ParsleySimpleForm
         when 'ipv4+v6', 'both', 'ipv4v6', 'all'
           return true if value =~ Resolv::IPv4::Regex || value =~ Resolv::IPv6::Regex
         end
+        false
       end
-      return false
     end
   end
 end
