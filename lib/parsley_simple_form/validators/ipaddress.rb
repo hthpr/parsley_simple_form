@@ -7,7 +7,14 @@ module ParsleySimpleForm
       end
 
       def validate_each(record, attribute, value)
-        record.errors[attribute] << (options[:message] || 'is not a valid IP address') unless value =~ Resolv::IPv4::Regex
+        case options[:type]
+        when :ipv4
+          record.errors[attribute] << (options[:message] || 'is not a valid IP address') unless value =~ Resolv::IPv4::Regex
+        when :ipv6
+          record.errors[attribute] << (options[:message] || 'is not a valid IP address') unless value =~ Resolv::IPv6::Regex
+        else
+          record.errors[attribute] << (options[:message] || 'is not a valid IP address')
+        end
       end
 
       def attribute_validate(*args)
