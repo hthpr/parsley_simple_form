@@ -19,6 +19,7 @@ module ParsleySimpleForm
                     'parsley-success-class': 'has-feedback has-success',
                     'parsley-errors-wrapper': '<span class="help-block">',
                     'parsley-error-template': '<div></div>',
+                    'parsley-trigger-after-failure': 'input change',
                     'parsley-excluded': 'input[type=button], input[type=submit], input[type=reset],
                                          input[type=hidden], [disabled]' }
         parsley[:'parsley-trigger'] = object.respond_to?(:new_record?) && object.new_record? ? 'focusout' : 'change'
